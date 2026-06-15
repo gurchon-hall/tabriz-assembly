@@ -25,8 +25,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "ruff",
+    "alembic",
     "mypy",
+    "ruff",
 ]
 
 [tool.script]
