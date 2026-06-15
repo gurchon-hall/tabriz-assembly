@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field
 
-from app.models.user import UserRole
+from app.models.enums import UserRole
 
 # ---------------------------------------------------------------------------
 # Règles de complexité du mot de passe

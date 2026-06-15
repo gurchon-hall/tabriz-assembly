@@ -8,8 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
 from app.config import settings
-from app.config.database import Base
 from app.core.error_handler import register_exception_handlers
+from app.models.base import Base
 
 logger = settings.log.get_logger(__name__)
 
