@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tabriz-assembly"
+version = "0.0.1"
+description = "Tabriz Assembly: Machine Learning/Statistics exploration"
+readme = "README.md"
+requires-python = ">=3.14"
+license = { text = "MIT" }
+
+dependencies = [
+    "argon2-cffi",
+    "asyncpg",
+    "fastapi",
+    "psycopg2-binary",
+    "pydantic",
+    "pydantic[email]",
+    "pydantic-settings",
+    "python-jose",
+    "sqlalchemy",
+    "uvicorn",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+]
+
+[tool.script]
+api = "uvicorn app.main:app"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+# ---------------------------------------------------------------------------
+# Ruff (linter/formatter)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+
+# ---------------------------------------------------------------------------
+# Mypy
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.14"
+exclude = ["^tests/"]
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+strict_optional = true
+show_error_codes = true
+pretty = true
+check_untyped_defs = true
+warn_return_any = true
+warn_redundant_casts = true
+html_report = "reports/mypy"
+plugins = ["pydantic.mypy"]
