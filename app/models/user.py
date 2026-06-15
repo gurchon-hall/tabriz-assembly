@@ -6,7 +6,7 @@ from sqlalchemy import Boolean, DateTime, Enum, Integer, String, func
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.config.database import Base
+from app.config.database import Base, DatabaseSettings
 
 
 class UserRole(enum.StrEnum):
@@ -35,7 +35,7 @@ class UserRole(enum.StrEnum):
 class User(Base):
     """Modèle SQLAlchemy pour la table `users`."""
 
-    __tablename__ = "users"
+    __tablename__ = DatabaseSettings().table_prefix + "users"
 
     id: Mapped[uuid.UUID] = mapped_column(
         PG_UUID(as_uuid=True),
