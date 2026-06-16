@@ -74,10 +74,10 @@ class LibraryCard(Base):
     type: Mapped[str] = mapped_column(index=True)
     artist: Mapped[str]
 
-    capacity: Mapped[int] = mapped_column(default=0)
-    pool_cost: Mapped[int] = mapped_column(default=0)
-    blood_cost: Mapped[int] = mapped_column(default=0)
-    conviction_cost: Mapped[int] = mapped_column(default=0)
+    capacity: Mapped[str] = mapped_column(default="")
+    pool_cost: Mapped[str | None] = mapped_column(default=None)
+    blood_cost: Mapped[str | None] = mapped_column(default=None)
+    conviction_cost: Mapped[str | None] = mapped_column(default=None)
     clan: Mapped[str] = mapped_column(default="", index=True)
     path: Mapped[str] = mapped_column(default="")
     requirement: Mapped[str] = mapped_column(default="")

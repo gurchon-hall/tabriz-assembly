@@ -44,7 +44,6 @@ class Card(BaseModel):
     clan: str = Field(alias="Clan", default="")
     path: str = Field(alias="Path", default="")
     card_text: str = Field(alias="Card Text", default="")
-    capacity: int = Field(alias="Capacity", default=-1)
     banned: bool = Field(alias="Banned", default=False)
 
     @field_validator("set_abbrevs", mode="before")
@@ -54,65 +53,70 @@ class Card(BaseModel):
             return parse_set_abbrevs(v)
         return v
 
-    @field_validator("capacity", mode="before")
-    @classmethod
-    def empty_to_default(cls, v: Any) -> Any:
-        if v == "":
-            return -1
-        return v
-
     @field_validator("banned", mode="before")
     @classmethod
-    def coerce_banned(cls, v: Any) -> Any:
+    def coerce_banned(cls, v: Any) -> bool:
         if v == "":
             return False
-        return v
+        return True
 
 
 class CryptCard(Card):
     id: int = Field(..., alias="Id", ge=200001, lt=300000)
-    group: int | Literal["Any"] = Field(alias="Group")
+    group: int | Literal["ANY"] = Field(alias="Group")
     disciplines: str = Field(alias="Disciplines", default="")
     adv: bool = Field(alias="Adv", default=False)
     title: str = Field(alias="Title", default="")
+    capacity: int = Field(alias="Capacity", default=0)
 
     @field_validator("group", mode="before")
     @classmethod
-    def coerce_grouping(cls, v: Any) -> int | Literal["Any"]:
-        if v == "Any":
-            return "Any"
+    def coerce_grouping(cls, v: Any) -> int | Literal["ANY"]:
+        if isinstance(v, str) and v.strip().upper() == "ANY":
+            return "ANY"
         try:
             int_v = int(v)
             if 1 <= int_v <= 7:
                 return int_v
-            else:
-                raise TypeError(f"Can't assign {v} to grouping ANY nor 1 to 7: {int_v}")
-        except Exception as e:
-            raise TypeError(f"Can't assign {v} to grouping ANY nor 1 to 7: {e}")
+            raise TypeError(f"Can't assign {v} to grouping ANY nor 1 to 7: {int_v}")
+        except (ValueError, TypeError) as e:
+            raise TypeError(f"Can't assign {v} to grouping ANY nor 1 to 7: {e}") from e
 
     @field_validator("adv", mode="before")
     @classmethod
-    def coerce_adv(cls, v: Any) -> Any:
-        if v == "":
-            return False
-        return v
+    def coerce_adv(cls, v: Any) -> bool:
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "advanced"}
+        return bool(v)
 
 
 class LibraryCard(Card):
     id: int = Field(..., alias="Id", ge=100001, lt=200000)
     discipline: str = Field(alias="Discipline", default="")
-    pool_cost: int = Field(alias="Pool Cost", default=-1)
-    blood_cost: int = Field(alias="Blood Cost", default=-1)
-    conviction_cost: int = Field(alias="Conviction Cost", default=-1)
+    pool_cost: int | Literal["X"] | None = Field(alias="Pool Cost", default=None)
+    blood_cost: int | Literal["X"] | None = Field(alias="Blood Cost", default=None)
+    conviction_cost: int | Literal["X"] | None = Field(alias="Conviction Cost", default=None)
     burn_option: bool = Field(alias="Burn Option", default=False)
     flavor_text: str = Field(alias="Flavor Text", default="")
+    capacity: str = Field(alias="Capacity", default="")
+
+    @field_validator("capacity", mode="before")
+    @classmethod
+    def coerce_capacity(cls, v: Any) -> str:
+        if v is None or (isinstance(v, str) and v.strip() == ""):
+            return ""
+        return str(v).strip()
 
     @field_validator("pool_cost", "blood_cost", "conviction_cost", mode="before")
     @classmethod
-    def empty_cost_to_default(cls, v: Any) -> Any:
-        if v == "":
-            return -1
-        return v
+    def empty_cost(cls, v: Any) -> int | Literal["X"] | None:
+        if isinstance(v, str) and v.strip().upper() == "X":
+            return "X"
+        if isinstance(v, int):
+            return v
+        return None
 
     @field_validator("burn_option", mode="before")
     @classmethod
