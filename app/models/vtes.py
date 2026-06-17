@@ -87,9 +87,22 @@ class LibraryCard(Base):
     banned: Mapped[bool] = mapped_column(default=False)
     burn_option: Mapped[bool] = mapped_column(default=False)
 
+    first_print_set_id: Mapped[int | None] = mapped_column(
+        ForeignKey(TABLE_PREFIX + "sets.id", ondelete="SET NULL"),
+        nullable=True,
+        default=None,
+        index=True,
+    )
+
     sets: Mapped[list[Set]] = relationship(
         secondary=lambda: LibraryCardSet.__table__,
         back_populates="library_cards",
+        lazy="select",
+    )
+
+    first_print: Mapped[Set | None] = relationship(
+        "Set",
+        foreign_keys="[LibraryCard.first_print_set_id]",
         lazy="select",
     )
 
@@ -114,9 +127,22 @@ class CryptCard(Base):
     banned: Mapped[bool] = mapped_column(default=False)
     adv: Mapped[bool] = mapped_column(default=False)
 
+    first_print_set_id: Mapped[int | None] = mapped_column(
+        ForeignKey(TABLE_PREFIX + "sets.id", ondelete="SET NULL"),
+        nullable=True,
+        default=None,
+        index=True,
+    )
+
     sets: Mapped[list[Set]] = relationship(
         secondary=lambda: CryptCardSet.__table__,
         back_populates="crypt_cards",
+        lazy="select",
+    )
+
+    first_print: Mapped[Set | None] = relationship(
+        "Set",
+        foreign_keys="[CryptCard.first_print_set_id]",
         lazy="select",
     )
 

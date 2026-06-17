@@ -16,7 +16,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import app.models.vtes as vtes_models
@@ -72,6 +72,16 @@ async def _seed_sets(session: AsyncSession) -> None:
     await session.commit()
 
     logger.info(f"seed_sets importé: {counter}")
+
+
+def _compute_first_print_set_id(
+    target_sets: list[vtes_models.Set],
+) -> int | None:
+    """Retourne l'id du set avec la release_date la plus ancienne, ou None."""
+    dated = [s for s in target_sets if s.release_date is not None]
+    if not dated:
+        return None
+    return min(dated, key=lambda s: s.release_date).id  # type: ignore[arg-type]
 
 
 async def _upsert_set(
@@ -171,6 +181,7 @@ async def _upsert_crypt_card(
                 banned=row.banned,
                 adv=row.adv,
                 sets=target_sets,
+                first_print_set_id=_compute_first_print_set_id(target_sets),
             )
         )
         counters.created += 1
@@ -217,6 +228,9 @@ async def _upsert_crypt_card(
     await session.refresh(existing, attribute_names=["sets"])
     if _sync_sets_relation(existing.sets, target_sets):
         changed = True
+        new_fp = _compute_first_print_set_id(target_sets)
+        if existing.first_print_set_id != new_fp:
+            existing.first_print_set_id = new_fp
 
     counters.updated += 1 if changed else 0
     counters.unchanged += 0 if changed else 1
@@ -256,6 +270,7 @@ async def _upsert_library_card(
                 banned=row.banned,
                 burn_option=row.burn_option,
                 sets=target_sets,
+                first_print_set_id=_compute_first_print_set_id(target_sets),
             )
         )
         counters.created += 1
@@ -309,6 +324,9 @@ async def _upsert_library_card(
     await session.refresh(existing, attribute_names=["sets"])
     if _sync_sets_relation(existing.sets, target_sets):
         changed = True
+        new_fp = _compute_first_print_set_id(target_sets)
+        if existing.first_print_set_id != new_fp:
+            existing.first_print_set_id = new_fp
 
     counters.updated += 1 if changed else 0
     counters.unchanged += 0 if changed else 1
@@ -343,6 +361,43 @@ async def _apply_library_meta(
         counters.updated += 1
     else:
         counters.unchanged += 1
+
+
+async def _recompute_all_first_prints(session: AsyncSession) -> None:
+    """Filet de sécurité : recalcule first_print_set_id pour toutes les cartes."""
+
+    # CryptCard
+    crypt_subq = (
+        select(vtes_models.CryptCardSet.set_id)
+        .join(vtes_models.Set, vtes_models.Set.id == vtes_models.CryptCardSet.set_id)
+        .where(
+            vtes_models.CryptCardSet.crypt_card_id == vtes_models.CryptCard.id,
+            vtes_models.Set.release_date.is_not(None),
+        )
+        .order_by(vtes_models.Set.release_date.asc())
+        .limit(1)
+        .scalar_subquery()
+        .correlate(vtes_models.CryptCard)
+    )
+    await session.execute(update(vtes_models.CryptCard).values(first_print_set_id=crypt_subq))
+
+    # LibraryCard
+    library_subq = (
+        select(vtes_models.LibraryCardSet.set_id)
+        .join(vtes_models.Set, vtes_models.Set.id == vtes_models.LibraryCardSet.set_id)
+        .where(
+            vtes_models.LibraryCardSet.library_card_id == vtes_models.LibraryCard.id,
+            vtes_models.Set.release_date.is_not(None),
+        )
+        .order_by(vtes_models.Set.release_date.asc())
+        .limit(1)
+        .scalar_subquery()
+        .correlate(vtes_models.LibraryCard)
+    )
+    await session.execute(update(vtes_models.LibraryCard).values(first_print_set_id=library_subq))
+
+    await session.commit()
+    logger.info("first_print_set_id recalculé pour toutes les cartes")
 
 
 async def run_import() -> ImportResult:
@@ -397,6 +452,7 @@ async def run_import() -> ImportResult:
                     raise ValueError(f"Fichier CSV non géré : {filename}")
 
                 await session.commit()
+                await _recompute_all_first_prints(session)
                 result.counters[filename] = counters
                 logger.info("%s importé : %s", filename, counters)
 
