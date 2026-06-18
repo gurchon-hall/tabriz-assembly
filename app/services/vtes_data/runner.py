@@ -452,8 +452,9 @@ async def run_import() -> ImportResult:
                     raise ValueError(f"Fichier CSV non géré : {filename}")
 
                 await session.commit()
-                await _recompute_all_first_prints(session)
                 result.counters[filename] = counters
                 logger.info("%s importé : %s", filename, counters)
+
+            await _recompute_all_first_prints(session)
 
     return result
