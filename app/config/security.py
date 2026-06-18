@@ -50,7 +50,7 @@ class SecuritySettings(BaseSettings):
     def verify_password(self, plain: str, hashed: str) -> bool:
         try:
             return _hasher.verify(hashed, plain)
-        except VerificationError, InvalidHashError:
+        except (VerificationError, InvalidHashError):
             # VerifyMismatchError hérite de VerificationError — couvert implicitement.
             return False
 
@@ -58,7 +58,7 @@ class SecuritySettings(BaseSettings):
         """Call to equalize verifications for an unknown user."""
         try:
             _hasher.verify(_DUMMY_HASH, plain)
-        except VerificationError, InvalidHashError:
+        except (VerificationError, InvalidHashError):
             pass
 
     # Tokens

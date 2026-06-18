@@ -7,6 +7,7 @@ from app.config.base import BaseAppSettings
 from app.config.database import DatabaseSettings
 from app.config.logging import LoggingSettings
 from app.config.security import SecuritySettings
+from app.config.tournament import TournamentImportSettings
 
 
 class AppSettings(BaseSettings):
@@ -15,6 +16,7 @@ class AppSettings(BaseSettings):
     log: LoggingSettings = LoggingSettings()
     api: ApiSettings = ApiSettings()
     security: SecuritySettings = SecuritySettings()
+    tournament: TournamentImportSettings = TournamentImportSettings()
 
     model_config = {
         "env_file": ".env",
@@ -40,6 +42,7 @@ class AppSettings(BaseSettings):
         tmp.append(self.log.__repr__())
         tmp.append(self.api.__repr__())
         tmp.append(self.security.__repr__())
+        tmp.append(self.tournament.__repr__())
         return "\n" + "\n\t".join(tmp) + "\n</Settings>"
 
     @property

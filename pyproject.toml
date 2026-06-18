@@ -19,6 +19,7 @@ dependencies = [
     "pydantic[email]",
     "pydantic-settings",
     "python-jose",
+    "pyyaml",
     "sqlalchemy",
     "uvicorn",
 ]
@@ -28,6 +29,7 @@ dev = [
     "alembic",
     "mypy",
     "ruff",
+    "types-PyYAML",
 ]
 machine-learning = [
     "ipywidgets",
