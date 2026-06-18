@@ -51,6 +51,9 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# Mypy HTML report (html_report = "reports/mypy")
+reports/
+
 # Translations
 *.mo
 *.pot
