@@ -162,7 +162,10 @@ async def _upsert_crypt_card(
     if missing:
         logger.warning("CryptCard %s: set(s) inconnu(s) ignoré(s) : %s", row.id, missing)
 
-    existing = await session.get(vtes_models.CryptCard, row.id, options=[])
+    existing = await session.get(
+        vtes_models.CryptCard,
+        {"id": row.id, "group": str(row.group), "adv": row.adv},
+    )
 
     if existing is None:
         session.add(
@@ -372,6 +375,8 @@ async def _recompute_all_first_prints(session: AsyncSession) -> None:
         .join(vtes_models.Set, vtes_models.Set.id == vtes_models.CryptCardSet.set_id)
         .where(
             vtes_models.CryptCardSet.crypt_card_id == vtes_models.CryptCard.id,
+            vtes_models.CryptCardSet.crypt_card_group == vtes_models.CryptCard.group,
+            vtes_models.CryptCardSet.crypt_card_adv == vtes_models.CryptCard.adv,
             vtes_models.Set.release_date.is_not(None),
         )
         .order_by(vtes_models.Set.release_date.asc())
