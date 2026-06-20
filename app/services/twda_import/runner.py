@@ -6,6 +6,7 @@ résolus une seule fois via des maps construites au démarrage ; la résolution 
 opportuniste (FK nullable, ``raw_name`` toujours conservé).
 """
 
+import re
 from dataclasses import dataclass, field
 
 from sqlalchemy import select
@@ -28,6 +29,30 @@ CryptKey = tuple[str, str, bool]  # (clean_name, group_str, adv)
 CryptRef = tuple[int, str, bool]  # (id, group, adv)
 CryptRow = tuple[int, str, int, int | None, str | None, bool | None]
 LibraryRow = tuple[str, int, str, int | None]
+
+# Article en tête de nom, ex. "The Horde" → groupe 1 = "Horde".
+_LEADING_THE_RE = re.compile(r"^[Tt]he\s+(.+)$")
+
+
+def _canonical_name(name: str) -> str:
+    """Réécrit un nom de carte vers la forme des données de référence (vtescsv).
+
+    Les noms reçus suivent la nomenclature officielle krcg (eternal-vigilance) ;
+    les cartes en base suivent celle de vteslib.csv / vtescrypt.csv. Deux écarts
+    de convention sont réconciliés ici, côté consommateur :
+      - article en tête : ``The Horde`` → ``Horde, The`` (ordre de tri vtescsv) ;
+      - symbole ``™``    : ``Pentex™ Subversion`` → ``Pentex(TM) Subversion``.
+    """
+    m = _LEADING_THE_RE.match(name)
+    if m:
+        name = f"{m.group(1)}, The"
+    return name.replace("™", "(TM)")
+
+
+def _name_candidates(name: str) -> tuple[str, ...]:
+    """Nom brut puis, si différente, sa forme canonique (essayés dans l'ordre)."""
+    canonical = _canonical_name(name)
+    return (name,) if canonical == name else (name, canonical)
 
 
 @dataclass
@@ -79,11 +104,22 @@ async def _build_library_map(session: AsyncSession) -> dict[str, int]:
 def _resolve_crypt(
     name: str, group: str, adv: bool, crypt_map: dict[CryptKey, CryptRef]
 ) -> CryptRef | None:
-    ref = crypt_map.get((name, group, adv))
-    if ref is None:
-        # Certaines cartes de crypt sont stockées avec le groupe "ANY".
-        ref = crypt_map.get((name, "ANY", adv))
-    return ref
+    for candidate in _name_candidates(name):
+        ref = crypt_map.get((candidate, group, adv))
+        if ref is None:
+            # Certaines cartes de crypt sont stockées avec le groupe "ANY".
+            ref = crypt_map.get((candidate, "ANY", adv))
+        if ref is not None:
+            return ref
+    return None
+
+
+def _resolve_library(name: str, library_map: dict[str, int]) -> int | None:
+    for candidate in _name_candidates(name):
+        card_id = library_map.get(candidate)
+        if card_id is not None:
+            return card_id
+    return None
 
 
 # ----------------------------------------------------------------------------
@@ -118,7 +154,7 @@ def _desired_library_rows(
     unresolved = 0
     for section in deck.library_sections:
         for card in section.cards:
-            card_id = library_map.get(card.name)
+            card_id = _resolve_library(card.name, library_map)
             if card_id is None:
                 unresolved += 1
                 logger.warning("Library non résolue: %r (section=%s)", card.name, section.name)
