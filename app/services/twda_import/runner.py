@@ -25,7 +25,7 @@ from app.services.vtes_data.runner import ImportCounters
 
 logger = settings.log.get_logger(__name__)
 
-CryptKey = tuple[str, str, bool]  # (clean_name, group_str, adv)
+CryptKey = tuple[str, str, bool]  # (clean_name.lower(), group_str, adv)
 CryptRef = tuple[int, str, bool]  # (id, group, adv)
 CryptRow = tuple[int, str, int, int | None, str | None, bool | None]
 LibraryRow = tuple[str, int, str, int | None]
@@ -81,7 +81,8 @@ async def _build_crypt_map(session: AsyncSession) -> dict[CryptKey, CryptRef]:
     )
     crypt_map: dict[CryptKey, CryptRef] = {}
     for card_id, group, adv, name in result.all():
-        crypt_map[(name, str(group), bool(adv))] = (card_id, str(group), bool(adv))
+        # Clé en minuscules : la résolution est insensible à la casse (cf. _resolve_*).
+        crypt_map[(name.lower(), str(group), bool(adv))] = (card_id, str(group), bool(adv))
     return crypt_map
 
 
@@ -89,15 +90,16 @@ async def _build_library_map(session: AsyncSession) -> dict[str, int]:
     result = await session.execute(select(LibraryCard.id, LibraryCard.name))
     library_map: dict[str, int] = {}
     for card_id, name in result.all():
-        if name in library_map:
+        key = name.lower()
+        if key in library_map:
             logger.warning(
                 "Library: nom dupliqué %r (ids %s et %s) — premier conservé",
                 name,
-                library_map[name],
+                library_map[key],
                 card_id,
             )
             continue
-        library_map[name] = card_id
+        library_map[key] = card_id
     return library_map
 
 
@@ -105,10 +107,11 @@ def _resolve_crypt(
     name: str, group: str, adv: bool, crypt_map: dict[CryptKey, CryptRef]
 ) -> CryptRef | None:
     for candidate in _name_candidates(name):
-        ref = crypt_map.get((candidate, group, adv))
+        key = candidate.lower()
+        ref = crypt_map.get((key, group, adv))
         if ref is None:
             # Certaines cartes de crypt sont stockées avec le groupe "ANY".
-            ref = crypt_map.get((candidate, "ANY", adv))
+            ref = crypt_map.get((key, "ANY", adv))
         if ref is not None:
             return ref
     return None
@@ -116,7 +119,7 @@ def _resolve_crypt(
 
 def _resolve_library(name: str, library_map: dict[str, int]) -> int | None:
     for candidate in _name_candidates(name):
-        card_id = library_map.get(candidate)
+        card_id = library_map.get(candidate.lower())
         if card_id is not None:
             return card_id
     return None
