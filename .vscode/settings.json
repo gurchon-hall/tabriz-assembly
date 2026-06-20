@@ -105,5 +105,8 @@
   },
   "files.watcherExclude": {
     "**/.venv/**": true,
-  }
+  },
+  "python.analysis.exclude": [
+    "**/*.ipynb"
+  ]
 }
