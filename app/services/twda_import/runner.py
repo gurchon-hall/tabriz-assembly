@@ -51,6 +51,8 @@ def _canonical_name(name: str) -> str:
 
 def _name_candidates(name: str) -> tuple[str, ...]:
     """Nom brut puis, si différente, sa forme canonique (essayés dans l'ordre)."""
+    if name == "KuyÃ©n":
+        return (name, _canonical_name("Kuyén"))
     canonical = _canonical_name(name)
     return (name,) if canonical == name else (name, canonical)
 
