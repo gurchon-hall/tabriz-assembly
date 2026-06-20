@@ -107,6 +107,10 @@
     "**/.venv/**": true,
   },
   "python.analysis.exclude": [
-    "**/*.ipynb"
+    "**/*.ipynb",
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.*",
+    ".venv"
   ]
 }
