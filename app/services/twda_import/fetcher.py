@@ -79,5 +79,5 @@ def fetch_tournament_yaml(
         payload = yaml.safe_load(raw)
         return YamlTournament.model_validate(payload)
     except (ValidationError, yaml.YAMLError) as exc:
-        logger.warning("%s : YAML invalide, ignoré — %s", path, exc)
+        logger.warning("%s : YAML invalide, ignoré — %s", path, str(exc))
         return None
