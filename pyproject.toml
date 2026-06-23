@@ -27,13 +27,30 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "alembic",
+    "lxml",
     "mypy",
     "ruff",
+    "types-greenlet",
+    "types-psycopg2",
+    "types-python-jose",
+    "types-Pygments",
+    "types-pywin32",
     "types-PyYAML",
 ]
 machine-learning = [
     "ipywidgets",
     "jupyter",
+    "matplotlib",
+    "pandas",
+    "pandas-stubs",
+    "plotly",
+    "plotly-stubs",
+    "pyarrow",
+    "seaborn",
+    "scikit-learn",
+    "scikit-learn-stubs",
+    "scipy",
+    "scipy-stubs[scipy]"
 ]
 
 [tool.script]
