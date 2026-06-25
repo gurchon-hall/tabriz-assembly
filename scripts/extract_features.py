@@ -51,12 +51,11 @@ def _render_features(features: CardFeatures) -> dict[str, CardFeatures]:
             groups["crypt_disciplines_base"][k] = v
         elif k.startswith("crypt_sup_"):
             groups["crypt_disciplines_superior"][k] = v
-        elif k.startswith("crypt_pct_") and ("bleed" in k or "stealth" in k
-                                              or "intercept" in k or "strength" in k):
-            groups["crypt_bonuses"][k] = v
-        elif k.startswith("crypt_pct_era") or k in (
-            "crypt_pct_era_v5plus", "crypt_pct_era_pre_v5"
+        elif k.startswith("crypt_pct_") and (
+            "bleed" in k or "stealth" in k or "intercept" in k or "strength" in k
         ):
+            groups["crypt_bonuses"][k] = v
+        elif k.startswith("crypt_pct_era") or k in ("crypt_pct_era_v5plus", "crypt_pct_era_pre_v5"):
             groups["crypt_era"][k] = v
         elif k.startswith("crypt_"):
             groups["crypt_scalars"][k] = v
@@ -131,28 +130,28 @@ async def main() -> None:
             features = deck_features(deck)
         except Exception as exc:
             print(f"  ERROR: {exc}")
-            import traceback; traceback.print_exc()
+            import traceback
+
+            traceback.print_exc()
             continue
 
-        unresolved_crypt = sum(
-            1 for dc in deck.crypt_cards if dc.crypt_card is None
-        )
-        unresolved_lib = sum(
-            1 for dl in deck.library_cards if dl.library_card is None
-        )
+        unresolved_crypt = sum(1 for dc in deck.crypt_cards if dc.crypt_card is None)
+        unresolved_lib = sum(1 for dl in deck.library_cards if dl.library_card is None)
 
-        records.append({
-            "tournament": tournament.name,
-            "date_start": str(tournament.date_start),
-            "winner": tournament.winner,
-            "deck_name": deck.name,
-            "crypt_count": deck.crypt_count,
-            "library_count": deck.library_count,
-            "unresolved_crypt_rows": unresolved_crypt,
-            "unresolved_library_rows": unresolved_lib,
-            "feature_count": len(features),
-            "features": _round_floats(_render_features(features)),
-        })
+        records.append(
+            {
+                "tournament": tournament.name,
+                "date_start": str(tournament.date_start),
+                "winner": tournament.winner,
+                "deck_name": deck.name,
+                "crypt_count": deck.crypt_count,
+                "library_count": deck.library_count,
+                "unresolved_crypt_rows": unresolved_crypt,
+                "unresolved_library_rows": unresolved_lib,
+                "feature_count": len(features),
+                "features": _round_floats(_render_features(features)),
+            }
+        )
 
     # -----------------------------------------------------------------
     # Console summary
@@ -176,42 +175,56 @@ async def main() -> None:
 
         # Crypt scalars
         if sc := feats.get("crypt_scalars"):
-            keys = ["crypt_total", "crypt_avg_capacity", "crypt_avg_nb_disc",
-                    "crypt_avg_nb_sup_disc", "crypt_avg_nb_votes",
-                    "crypt_avg_card_points_for_capacity",
-                    "crypt_is_monoclan", "crypt_has_star_vampire"]
-            print("  crypt:  " + "  ".join(
-                f"{k.removeprefix('crypt_')}={sc[k]}"
-                for k in keys if k in sc
-            ))
+            keys = [
+                "crypt_total",
+                "crypt_avg_capacity",
+                "crypt_avg_nb_disc",
+                "crypt_avg_nb_sup_disc",
+                "crypt_avg_nb_votes",
+                "crypt_avg_card_points_for_capacity",
+                "crypt_is_monoclan",
+                "crypt_has_star_vampire",
+            ]
+            print(
+                "  crypt:  "
+                + "  ".join(f"{k.removeprefix('crypt_')}={sc[k]}" for k in keys if k in sc)
+            )
 
         # Dominant clan
         if clans := feats.get("crypt_clans"):
             top = sorted(clans.items(), key=lambda x: -x[1])[:3]
-            print("  clans:  " + "  ".join(f"{k.removeprefix('crypt_clan_')}={v:.2f}"
-                                            for k, v in top))
+            print(
+                "  clans:  " + "  ".join(f"{k.removeprefix('crypt_clan_')}={v:.2f}" for k, v in top)
+            )
 
         # Top disciplines (base)
         if discs := feats.get("crypt_disciplines_base"):
             top = sorted(discs.items(), key=lambda x: -x[1])[:6]
-            print("  discs:  " + "  ".join(f"{k.removeprefix('crypt_disc_')}={v:.2f}"
-                                            for k, v in top))
+            print(
+                "  discs:  " + "  ".join(f"{k.removeprefix('crypt_disc_')}={v:.2f}" for k, v in top)
+            )
 
         # Library scalars
         if lsc := feats.get("library_scalars"):
-            keys = ["lib_total", "lib_avg_pool_cost", "lib_avg_blood_cost",
-                    "lib_pct_free", "lib_pct_no_requirements", "lib_pct_trifle"]
-            print("  lib:    " + "  ".join(
-                f"{k.removeprefix('lib_')}={lsc.get(k, '?')}"
-                for k in keys if k in lsc
-            ))
+            keys = [
+                "lib_total",
+                "lib_avg_pool_cost",
+                "lib_avg_blood_cost",
+                "lib_pct_free",
+                "lib_pct_no_requirements",
+                "lib_pct_trifle",
+            ]
+            print(
+                "  lib:    "
+                + "  ".join(f"{k.removeprefix('lib_')}={lsc.get(k, '?')}" for k in keys if k in lsc)
+            )
 
         # Top library types
         if ltypes := feats.get("library_types"):
             top = sorted(ltypes.items(), key=lambda x: -x[1])[:5]
-            print("  types:  " + "  ".join(
-                f"{k.removeprefix('lib_type_')}={v:.2f}" for k, v in top
-            ))
+            print(
+                "  types:  " + "  ".join(f"{k.removeprefix('lib_type_')}={v:.2f}" for k, v in top)
+            )
 
         # Top library traits (non-zero)
         if ltraits := feats.get("library_traits"):
@@ -220,9 +233,10 @@ async def main() -> None:
                 key=lambda x: -x[1],
             )[:8]
             if active:
-                print("  traits: " + "  ".join(
-                    f"{k.removeprefix('lib_trait_')}={v:.2f}" for k, v in active
-                ))
+                print(
+                    "  traits: "
+                    + "  ".join(f"{k.removeprefix('lib_trait_')}={v:.2f}" for k, v in active)
+                )
 
     # -----------------------------------------------------------------
     # JSON export

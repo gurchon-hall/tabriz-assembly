@@ -1,0 +1,573 @@
+{
+  "generated_at": "2026-06-25T10:34:25.979978+00:00",
+  "deck_count": 5,
+  "records": [
+    {
+      "tournament": "Warsaw Station",
+      "date_start": "2026-06-20",
+      "winner": "Marcin Zakrzewski",
+      "deck_name": "Bram's Kalinda updated",
+      "crypt_count": 12,
+      "library_count": 80,
+      "unresolved_crypt_rows": 0,
+      "unresolved_library_rows": 0,
+      "feature_count": 73,
+      "features": {
+        "crypt_scalars": {
+          "crypt_avg_capacity": 5.0833,
+          "crypt_avg_card_points_for_capacity": 0.9681,
+          "crypt_avg_nb_disc": 2.8333,
+          "crypt_avg_nb_sup_disc": 1.5,
+          "crypt_avg_nb_votes": 0.8333,
+          "crypt_has_dominant_clan": true,
+          "crypt_has_star_vampire": true,
+          "crypt_is_monoclan": false,
+          "crypt_total": 12
+        },
+        "crypt_clans": {
+          "crypt_clan_assamite": 0.9167,
+          "crypt_clan_banu_haqim": 0.0833
+        },
+        "crypt_groups": {
+          "crypt_group_5": 0.0833,
+          "crypt_group_6": 0.9167
+        },
+        "crypt_disciplines_base": {
+          "crypt_disc_aus": 0.0833,
+          "crypt_disc_cel": 0.9167,
+          "crypt_disc_obf": 1.0,
+          "crypt_disc_qui": 0.0833,
+          "crypt_disc_tha": 0.75
+        },
+        "crypt_disciplines_superior": {
+          "crypt_sup_cel": 0.5833,
+          "crypt_sup_obf": 0.5833,
+          "crypt_sup_tha": 0.3333
+        },
+        "crypt_bonuses": {
+          "crypt_pct_cond_bleed": 0.0,
+          "crypt_pct_cond_intercept": 0.0,
+          "crypt_pct_cond_stealth": 0.0,
+          "crypt_pct_cond_strength": 0.0,
+          "crypt_pct_uncond_bleed": 0.0,
+          "crypt_pct_uncond_intercept": 0.0,
+          "crypt_pct_uncond_stealth": 0.0,
+          "crypt_pct_uncond_strength": 0.0
+        },
+        "crypt_era": {
+          "crypt_pct_era_pre_v5": 0.1667,
+          "crypt_pct_era_v5plus": 0.8333
+        },
+        "library_scalars": {
+          "lib_avg_blood_cost": 0.0,
+          "lib_avg_pool_cost": 0.0,
+          "lib_pct_alt_disc": 0.0,
+          "lib_pct_blood_cost_x": 0.0,
+          "lib_pct_burn_option": 0.0,
+          "lib_pct_free": 1.0,
+          "lib_pct_multi_disc": 0.0125,
+          "lib_pct_multi_type": 0.1375,
+          "lib_pct_no_requirements": 0.1875,
+          "lib_pct_pool_cost_x": 0.0,
+          "lib_pct_trifle": 0.0875,
+          "lib_total": 80
+        },
+        "library_types": {
+          "lib_type_action_modifier": 0.3375,
+          "lib_type_combat": 0.3625,
+          "lib_type_master": 0.2625,
+          "lib_type_political_action": 0.05,
+          "lib_type_reaction": 0.125
+        },
+        "library_disciplines": {
+          "lib_disc_celerity": 0.15,
+          "lib_disc_obfuscate": 0.35,
+          "lib_disc_temporis": 0.0125,
+          "lib_disc_thaumaturgy": 0.05
+        },
+        "library_clan_req": {
+          "lib_req_clan_assamite": 0.15
+        },
+        "library_traits": {
+          "lib_trait_additional_strike": 0.075,
+          "lib_trait_aggravated": 0.0125,
+          "lib_trait_bleed": 0.0875,
+          "lib_trait_block_denial": 0.025,
+          "lib_trait_combat_ends": 0.025,
+          "lib_trait_dodge": 0.075,
+          "lib_trait_maneuver": 0.2125,
+          "lib_trait_press": 0.05,
+          "lib_trait_reduce_bleed": 0.125,
+          "lib_trait_stealth": 0.3375,
+          "lib_trait_unlock": 0.0125,
+          "lib_trait_votes_title": 0.1375
+        },
+        "library_era": {
+          "lib_pct_era_pre_v5": 0.725,
+          "lib_pct_era_v5plus": 0.275
+        },
+        "cross": {
+          "disc_overlap_ratio": 0.0,
+          "signal_bounce": 0.025,
+          "signal_intercept_rush": 0.3,
+          "signal_stealth_bleed": 0.425,
+          "signal_vote": 0.1375,
+          "signal_wall": 0.0125
+        }
+      }
+    },
+    {
+      "tournament": "1ª Etapa do GP Sulamericano de VtES",
+      "date_start": "2026-06-07",
+      "winner": "Anderson Pinto Rodrigues",
+      "deck_name": null,
+      "crypt_count": 12,
+      "library_count": 90,
+      "unresolved_crypt_rows": 0,
+      "unresolved_library_rows": 0,
+      "feature_count": 76,
+      "features": {
+        "crypt_scalars": {
+          "crypt_avg_capacity": 5.3333,
+          "crypt_avg_card_points_for_capacity": 0.9613,
+          "crypt_avg_nb_disc": 2.5833,
+          "crypt_avg_nb_sup_disc": 1.4167,
+          "crypt_avg_nb_votes": 1.1667,
+          "crypt_has_dominant_clan": true,
+          "crypt_has_star_vampire": false,
+          "crypt_is_monoclan": false,
+          "crypt_total": 12
+        },
+        "crypt_clans": {
+          "crypt_clan_gangrel": 0.8333,
+          "crypt_clan_tzimisce": 0.1667
+        },
+        "crypt_groups": {
+          "crypt_group_5": 0.0833,
+          "crypt_group_6": 0.9167
+        },
+        "crypt_disciplines_base": {
+          "crypt_disc_ani": 0.75,
+          "crypt_disc_cel": 0.1667,
+          "crypt_disc_dom": 0.1667,
+          "crypt_disc_for": 0.4167,
+          "crypt_disc_pre": 0.0833,
+          "crypt_disc_pro": 1.0
+        },
+        "crypt_disciplines_superior": {
+          "crypt_sup_ani": 0.4167,
+          "crypt_sup_dom": 0.0833,
+          "crypt_sup_for": 0.1667,
+          "crypt_sup_pro": 0.75
+        },
+        "crypt_bonuses": {
+          "crypt_pct_cond_bleed": 0.0,
+          "crypt_pct_cond_intercept": 0.0,
+          "crypt_pct_cond_stealth": 0.0,
+          "crypt_pct_cond_strength": 0.0,
+          "crypt_pct_uncond_bleed": 0.0833,
+          "crypt_pct_uncond_intercept": 0.0833,
+          "crypt_pct_uncond_stealth": 0.0,
+          "crypt_pct_uncond_strength": 0.0833
+        },
+        "crypt_era": {
+          "crypt_pct_era_pre_v5": 0.25,
+          "crypt_pct_era_v5plus": 0.75
+        },
+        "library_scalars": {
+          "lib_avg_blood_cost": 0.0,
+          "lib_avg_pool_cost": 0.0,
+          "lib_pct_alt_disc": 0.0,
+          "lib_pct_blood_cost_x": 0.0222,
+          "lib_pct_burn_option": 0.0,
+          "lib_pct_free": 0.9778,
+          "lib_pct_multi_disc": 0.0222,
+          "lib_pct_multi_type": 0.0444,
+          "lib_pct_no_requirements": 0.2556,
+          "lib_pct_pool_cost_x": 0.0,
+          "lib_pct_trifle": 0.0667,
+          "lib_total": 90
+        },
+        "library_types": {
+          "lib_type_action": 0.1556,
+          "lib_type_action_modifier": 0.1667,
+          "lib_type_combat": 0.1667,
+          "lib_type_master": 0.2556,
+          "lib_type_political_action": 0.0667,
+          "lib_type_reaction": 0.2333
+        },
+        "library_disciplines": {
+          "lib_disc_animalism": 0.0222,
+          "lib_disc_fortitude": 0.0222,
+          "lib_disc_protean": 0.2778
+        },
+        "library_clan_req": {
+          "lib_req_clan_gangrel": 0.1778,
+          "lib_req_clan_gangrel/gangrel_antitribu": 0.0111
+        },
+        "library_traits": {
+          "lib_trait_aggravated": 0.0222,
+          "lib_trait_bleed": 0.0222,
+          "lib_trait_bounce_bleed": 0.0778,
+          "lib_trait_combat_ends": 0.1444,
+          "lib_trait_dodge": 0.0444,
+          "lib_trait_intercept": 0.1333,
+          "lib_trait_maneuver": 0.0667,
+          "lib_trait_put_blood": 0.1778,
+          "lib_trait_reduce_bleed": 0.0222,
+          "lib_trait_stealth": 0.1556,
+          "lib_trait_unlock": 0.2111,
+          "lib_trait_votes_title": 0.0778
+        },
+        "library_era": {
+          "lib_pct_era_pre_v5": 0.7889,
+          "lib_pct_era_v5plus": 0.2111
+        },
+        "cross": {
+          "disc_overlap_ratio": 0.0,
+          "signal_bounce": 0.0778,
+          "signal_intercept_rush": 0.2222,
+          "signal_stealth_bleed": 0.1778,
+          "signal_vote": 0.0778,
+          "signal_wall": 0.3444
+        }
+      }
+    },
+    {
+      "tournament": "Torneio mensal Curitiba",
+      "date_start": "2026-06-06",
+      "winner": "Rafael Tokarski Ribas",
+      "deck_name": "Salubleed Kamikaze",
+      "crypt_count": 12,
+      "library_count": 90,
+      "unresolved_crypt_rows": 0,
+      "unresolved_library_rows": 0,
+      "feature_count": 68,
+      "features": {
+        "crypt_scalars": {
+          "crypt_avg_capacity": 6.5833,
+          "crypt_avg_card_points_for_capacity": 0.9833,
+          "crypt_avg_nb_disc": 3.8333,
+          "crypt_avg_nb_sup_disc": 2.4167,
+          "crypt_avg_nb_votes": 0.0,
+          "crypt_has_dominant_clan": true,
+          "crypt_has_star_vampire": false,
+          "crypt_is_monoclan": true,
+          "crypt_total": 12
+        },
+        "crypt_clans": {
+          "crypt_clan_salubri": 1.0
+        },
+        "crypt_groups": {
+          "crypt_group_7": 1.0
+        },
+        "crypt_disciplines_base": {
+          "crypt_disc_aus": 1.0,
+          "crypt_disc_cel": 0.3333,
+          "crypt_disc_dom": 1.0,
+          "crypt_disc_for": 1.0,
+          "crypt_disc_pot": 0.1667,
+          "crypt_disc_tha": 0.3333
+        },
+        "crypt_disciplines_superior": {
+          "crypt_sup_aus": 0.8333,
+          "crypt_sup_dom": 0.8333,
+          "crypt_sup_for": 0.75
+        },
+        "crypt_bonuses": {
+          "crypt_pct_cond_bleed": 0.0,
+          "crypt_pct_cond_intercept": 0.0,
+          "crypt_pct_cond_stealth": 0.0,
+          "crypt_pct_cond_strength": 0.0,
+          "crypt_pct_uncond_bleed": 0.0,
+          "crypt_pct_uncond_intercept": 0.0,
+          "crypt_pct_uncond_stealth": 0.3333,
+          "crypt_pct_uncond_strength": 0.0
+        },
+        "crypt_era": {
+          "crypt_pct_era_pre_v5": 0.0,
+          "crypt_pct_era_v5plus": 1.0
+        },
+        "library_scalars": {
+          "lib_avg_blood_cost": 0.0,
+          "lib_avg_pool_cost": 0.0,
+          "lib_pct_alt_disc": 0.0,
+          "lib_pct_blood_cost_x": 0.0,
+          "lib_pct_burn_option": 0.0,
+          "lib_pct_free": 1.0,
+          "lib_pct_multi_disc": 0.0,
+          "lib_pct_multi_type": 0.0222,
+          "lib_pct_no_requirements": 0.1889,
+          "lib_pct_pool_cost_x": 0.0,
+          "lib_pct_trifle": 0.0,
+          "lib_total": 90
+        },
+        "library_types": {
+          "lib_type_action": 0.2111,
+          "lib_type_action_modifier": 0.4444,
+          "lib_type_combat": 0.0444,
+          "lib_type_master": 0.1444,
+          "lib_type_reaction": 0.1778
+        },
+        "library_disciplines": {
+          "lib_disc_auspex": 0.0667,
+          "lib_disc_dominate": 0.6556,
+          "lib_disc_fortitude": 0.0889
+        },
+        "library_clan_req": {
+          "lib_req_clan_salubri": 0.2778
+        },
+        "library_traits": {
+          "lib_trait_aggravated": 0.0111,
+          "lib_trait_bleed": 0.3444,
+          "lib_trait_block_denial": 0.2333,
+          "lib_trait_bounce_bleed": 0.1,
+          "lib_trait_intercept": 0.0667,
+          "lib_trait_prevent": 0.0444,
+          "lib_trait_put_blood": 0.2,
+          "lib_trait_stealth": 0.1444,
+          "lib_trait_unlock": 0.1111
+        },
+        "library_era": {
+          "lib_pct_era_pre_v5": 0.7222,
+          "lib_pct_era_v5plus": 0.2778
+        },
+        "cross": {
+          "disc_overlap_ratio": 0.0,
+          "signal_bounce": 0.3333,
+          "signal_intercept_rush": 0.0778,
+          "signal_stealth_bleed": 0.4889,
+          "signal_vote": 0.0,
+          "signal_wall": 0.1778
+        }
+      }
+    },
+    {
+      "tournament": "Old Friends",
+      "date_start": "2026-06-06",
+      "winner": "Alessandro Donati",
+      "deck_name": "Blessing of Chaos",
+      "crypt_count": 12,
+      "library_count": 90,
+      "unresolved_crypt_rows": 0,
+      "unresolved_library_rows": 0,
+      "feature_count": 74,
+      "features": {
+        "crypt_scalars": {
+          "crypt_avg_capacity": 6.8333,
+          "crypt_avg_card_points_for_capacity": 1.1741,
+          "crypt_avg_nb_disc": 3.8333,
+          "crypt_avg_nb_sup_disc": 2.4167,
+          "crypt_avg_nb_votes": 1.4167,
+          "crypt_has_dominant_clan": true,
+          "crypt_has_star_vampire": false,
+          "crypt_is_monoclan": true,
+          "crypt_total": 12
+        },
+        "crypt_clans": {
+          "crypt_clan_malkavian_antitribu": 1.0
+        },
+        "crypt_groups": {
+          "crypt_group_2": 0.5,
+          "crypt_group_3": 0.5
+        },
+        "crypt_disciplines_base": {
+          "crypt_disc_ani": 0.25,
+          "crypt_disc_aus": 1.0,
+          "crypt_disc_dem": 1.0,
+          "crypt_disc_dom": 0.0833,
+          "crypt_disc_obf": 1.0,
+          "crypt_disc_pre": 0.1667,
+          "crypt_disc_pro": 0.25,
+          "crypt_disc_tha": 0.0833
+        },
+        "crypt_disciplines_superior": {
+          "crypt_sup_aus": 0.9167,
+          "crypt_sup_dem": 0.8333,
+          "crypt_sup_obf": 0.6667
+        },
+        "crypt_bonuses": {
+          "crypt_pct_cond_bleed": 0.0,
+          "crypt_pct_cond_intercept": 0.0,
+          "crypt_pct_cond_stealth": 0.0,
+          "crypt_pct_cond_strength": 0.0,
+          "crypt_pct_uncond_bleed": 0.25,
+          "crypt_pct_uncond_intercept": 0.1667,
+          "crypt_pct_uncond_stealth": 0.0,
+          "crypt_pct_uncond_strength": 0.0
+        },
+        "crypt_era": {
+          "crypt_pct_era_pre_v5": 1.0,
+          "crypt_pct_era_v5plus": 0.0
+        },
+        "library_scalars": {
+          "lib_avg_blood_cost": 0.0,
+          "lib_avg_pool_cost": 0.0,
+          "lib_pct_alt_disc": 0.0778,
+          "lib_pct_blood_cost_x": 0.0,
+          "lib_pct_burn_option": 0.0,
+          "lib_pct_free": 1.0,
+          "lib_pct_multi_disc": 0.1556,
+          "lib_pct_multi_type": 0.0667,
+          "lib_pct_no_requirements": 0.1778,
+          "lib_pct_pool_cost_x": 0.0,
+          "lib_pct_trifle": 0.0,
+          "lib_total": 90
+        },
+        "library_types": {
+          "lib_type_action": 0.2444,
+          "lib_type_action_modifier": 0.3556,
+          "lib_type_combat": 0.1333,
+          "lib_type_master": 0.1556,
+          "lib_type_reaction": 0.1778
+        },
+        "library_disciplines": {
+          "lib_disc_auspex": 0.1889,
+          "lib_disc_celerity": 0.0444,
+          "lib_disc_dementation": 0.4111,
+          "lib_disc_obfuscate": 0.2889,
+          "lib_disc_presence": 0.1111
+        },
+        "library_traits": {
+          "lib_trait_bleed": 0.3111,
+          "lib_trait_block_denial": 0.0444,
+          "lib_trait_bounce_bleed": 0.0667,
+          "lib_trait_combat_ends": 0.0889,
+          "lib_trait_dodge": 0.0444,
+          "lib_trait_intercept": 0.1222,
+          "lib_trait_put_blood": 0.1444,
+          "lib_trait_reduce_bleed": 0.0222,
+          "lib_trait_stealth": 0.2667,
+          "lib_trait_unlock": 0.1111,
+          "lib_trait_votes_title": 0.0222
+        },
+        "library_era": {
+          "lib_pct_era_pre_v5": 0.7444,
+          "lib_pct_era_v5plus": 0.2556
+        },
+        "cross": {
+          "disc_overlap_ratio": 0.0,
+          "signal_bounce": 0.1111,
+          "signal_intercept_rush": 0.1222,
+          "signal_stealth_bleed": 0.5778,
+          "signal_vote": 0.0222,
+          "signal_wall": 0.2333
+        }
+      }
+    },
+    {
+      "tournament": "Liga JF de Junho",
+      "date_start": "2026-06-04",
+      "winner": "Rafael Miranda",
+      "deck_name": "Lá, lá, sombra",
+      "crypt_count": 12,
+      "library_count": 78,
+      "unresolved_crypt_rows": 0,
+      "unresolved_library_rows": 0,
+      "feature_count": 73,
+      "features": {
+        "crypt_scalars": {
+          "crypt_avg_capacity": 6.8333,
+          "crypt_avg_card_points_for_capacity": 1.1354,
+          "crypt_avg_nb_disc": 3.6667,
+          "crypt_avg_nb_sup_disc": 2.75,
+          "crypt_avg_nb_votes": 1.1667,
+          "crypt_has_dominant_clan": true,
+          "crypt_has_star_vampire": false,
+          "crypt_is_monoclan": false,
+          "crypt_total": 12
+        },
+        "crypt_clans": {
+          "crypt_clan_lasombra": 0.9167,
+          "crypt_clan_tremere": 0.0833
+        },
+        "crypt_groups": {
+          "crypt_group_6": 1.0
+        },
+        "crypt_disciplines_base": {
+          "crypt_disc_aus": 0.0833,
+          "crypt_disc_dom": 1.0,
+          "crypt_disc_for": 0.1667,
+          "crypt_disc_obl": 1.0,
+          "crypt_disc_pot": 0.8333,
+          "crypt_disc_pre": 0.1667,
+          "crypt_disc_pro": 0.1667,
+          "crypt_disc_tha": 0.25
+        },
+        "crypt_disciplines_superior": {
+          "crypt_sup_aus": 0.0833,
+          "crypt_sup_dom": 0.9167,
+          "crypt_sup_obl": 0.8333,
+          "crypt_sup_pot": 0.6667,
+          "crypt_sup_pro": 0.1667,
+          "crypt_sup_tha": 0.0833
+        },
+        "crypt_bonuses": {
+          "crypt_pct_cond_bleed": 0.0,
+          "crypt_pct_cond_intercept": 0.0,
+          "crypt_pct_cond_stealth": 0.0,
+          "crypt_pct_cond_strength": 0.0,
+          "crypt_pct_uncond_bleed": 0.0,
+          "crypt_pct_uncond_intercept": 0.25,
+          "crypt_pct_uncond_stealth": 0.0833,
+          "crypt_pct_uncond_strength": 0.0
+        },
+        "crypt_era": {
+          "crypt_pct_era_pre_v5": 0.0,
+          "crypt_pct_era_v5plus": 1.0
+        },
+        "library_scalars": {
+          "lib_avg_blood_cost": 0.0,
+          "lib_avg_pool_cost": 0.0,
+          "lib_pct_alt_disc": 0.0,
+          "lib_pct_blood_cost_x": 0.0,
+          "lib_pct_burn_option": 0.0,
+          "lib_pct_free": 1.0,
+          "lib_pct_multi_disc": 0.0,
+          "lib_pct_multi_type": 0.0,
+          "lib_pct_no_requirements": 0.141,
+          "lib_pct_pool_cost_x": 0.0,
+          "lib_pct_trifle": 0.0641,
+          "lib_total": 78
+        },
+        "library_types": {
+          "lib_type_action": 0.1795,
+          "lib_type_action_modifier": 0.2949,
+          "lib_type_combat": 0.1026,
+          "lib_type_master": 0.141,
+          "lib_type_political_action": 0.0513,
+          "lib_type_reaction": 0.2308
+        },
+        "library_disciplines": {
+          "lib_disc_dominate": 0.3462,
+          "lib_disc_oblivion": 0.4231
+        },
+        "library_clan_req": {
+          "lib_req_clan_lasombra": 0.0256
+        },
+        "library_traits": {
+          "lib_trait_bleed": 0.2051,
+          "lib_trait_block_denial": 0.1026,
+          "lib_trait_bounce_bleed": 0.1154,
+          "lib_trait_combat_ends": 0.1026,
+          "lib_trait_intercept": 0.0256,
+          "lib_trait_put_blood": 0.1795,
+          "lib_trait_stealth": 0.3846,
+          "lib_trait_unlock": 0.1154
+        },
+        "library_era": {
+          "lib_pct_era_pre_v5": 0.5769,
+          "lib_pct_era_v5plus": 0.4231
+        },
+        "cross": {
+          "disc_overlap_ratio": 0.0,
+          "signal_bounce": 0.2179,
+          "signal_intercept_rush": 0.0256,
+          "signal_stealth_bleed": 0.5897,
+          "signal_vote": 0.0,
+          "signal_wall": 0.141
+        }
+      }
+    }
+  ]
+}
