@@ -102,7 +102,7 @@ def library_deck_features(
 
         # Era
         era = classify_era(card)
-        if era.get("firsprint"):
+        if era.get("firstprint"):
             era_post_slots += count
         else:
             era_pre_slots += count

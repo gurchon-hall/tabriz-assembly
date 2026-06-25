@@ -19,8 +19,6 @@ def cross_features(
     lib_total = int(lib_feats.get("lib_total", 0))
     total = crypt_total + lib_total
 
-    feats["crypt_library_ratio"] = safe_ratio(crypt_total, lib_total)
-
     if not total:
         return feats
 

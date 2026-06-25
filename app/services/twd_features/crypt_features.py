@@ -78,7 +78,7 @@ def crypt_deck_features(
 
         # Era
         era = classify_era(card)
-        if era.get("firsprint"):  # first_print is V5+
+        if era.get("firstprint"):  # first_print is V5+
             era_post_slots += count
         else:
             era_pre_slots += count
