@@ -171,7 +171,7 @@ async def main() -> None:
 
         # Cross features
         if cross := feats.get("cross"):
-            print(f"  cross:  " + "  ".join(f"{k}={v}" for k, v in cross.items()))
+            print("  cross:  " + "  ".join(f"{k}={v}" for k, v in cross.items()))
 
         # Crypt scalars
         if sc := feats.get("crypt_scalars"):
