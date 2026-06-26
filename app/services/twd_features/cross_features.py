@@ -41,6 +41,23 @@ def cross_features(
     else:
         feats["disc_overlap_ratio"] = 1.0  # no disc requirement = always playable
 
+    # Path overlap: fraction of lib path-req slots whose path is present in the crypt
+    lib_path_reqs = {
+        k[len("lib_req_path_") :]: v
+        for k, v in lib_feats.items()
+        if k.startswith("lib_req_path_") and k != "lib_req_path_none" and isinstance(v, float)
+    }
+    if lib_path_reqs:
+        total_lib_path_weight = sum(lib_path_reqs.values())
+        path_overlap_weight = sum(
+            share
+            for path, share in lib_path_reqs.items()
+            if crypt_feats.get(f"crypt_path_{path}", 0.0) > 0
+        )
+        feats["path_overlap_ratio"] = safe_ratio(path_overlap_weight, total_lib_path_weight)
+    else:
+        feats["path_overlap_ratio"] = 1.0  # no path requirement = always playable
+
     # Strategy signals derived from trait combinations
     # These are intentionally coarse — they label broad archetypes.
     stealth = float(lib_feats.get("lib_trait_stealth", 0.0))

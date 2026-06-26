@@ -102,6 +102,32 @@ LINE_START_TAG_RE = re.compile(
 # Each entry maps a trait name to a compiled regex that is tested against
 # the card's card_text (case-insensitive, same as JS's /i flag).
 # ---------------------------------------------------------------------------
+# --------------------------------
+# Sects
+# --------------------------------
+KNOWN_SECTS: set[str] = {"independent", "sabbat", "camarilla", "anarch", "laibon"}
+
+REQUIREMENT_TO_SECT: dict[str, str] = {
+    "baron": "anarch",
+    "prince": "camarilla",
+    "primogen": "camarilla",
+    "justicar": "camarilla",
+    "inner circle": "camarilla",
+    "bishop": "sabbat",
+    "archbishop": "sabbat",
+    "priscus": "sabbat",
+    "cardinal": "sabbat",
+    "regent": "sabbat",
+    "magaji": "laibon",
+}
+
+# ---------------------------------------------------------------------------
+# LibraryTraitsRegexMap — direct translation from traitsRegexMaps.js
+#
+# Source: smeea/vdb @ frontend/src/utils/traitsRegexMaps.js
+# Each entry maps a trait name to a compiled regex that is tested against
+# the card's card_text (case-insensitive, same as JS's /i flag).
+# ---------------------------------------------------------------------------
 LIBRARY_TRAITS_REGEX: dict[str, re.Pattern[str]] = {
     # "+Intercept / -Stealth": intercept cards or stealth-denial cards
     "intercept": re.compile(

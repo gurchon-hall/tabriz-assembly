@@ -8,7 +8,7 @@ from app.services.twd_features.constants import (
     TITLE_TO_VOTES,
     CardFeatures,
 )
-from app.services.twd_features.helpers import classify_era, safe_ratio
+from app.services.twd_features.helpers import classify_era, get_crypt_sect, safe_ratio
 
 
 def crypt_deck_features(
@@ -38,6 +38,8 @@ def crypt_deck_features(
     nb_votes_sum = 0.0
     card_points_sum = 0.0
     clan_counts: dict[str, int] = defaultdict(int)
+    sect_counts: dict[str, int] = defaultdict(int)
+    path_counts: dict[str, int] = defaultdict(int)
     group_counts: dict[str, int] = defaultdict(int)
     disc_base_counts: dict[str, int] = defaultdict(int)  # inferior or superior
     disc_sup_counts: dict[str, int] = defaultdict(int)  # superior only
@@ -61,10 +63,13 @@ def crypt_deck_features(
         nb_votes_sum += cf.get("nb_votes", 0) * count
         card_points_sum += cf.get("card_points_for_capacity", 0.0) * count
 
-        # Clan / group
+        # Clan / group / sect / path
         clan_key = card.clan.lower().replace(" ", "_")
         clan_counts[clan_key] += count
         group_counts[str(card.group).lower()] += count
+        sect_counts[get_crypt_sect(card.card_text)] += count
+        path_key = card.path.strip().lower().replace(" ", "_") if card.path.strip() else "none"
+        path_counts[path_key] += count
 
         # Disciplines
         for tok in card.disciplines.split():
@@ -128,6 +133,15 @@ def crypt_deck_features(
     # Superior level shares
     for code, cnt in disc_sup_counts.items():
         feats[f"crypt_sup_{code}"] = safe_ratio(cnt, total_slots)
+
+    # Sect shares
+    for sect, cnt in sect_counts.items():
+        feats[f"crypt_sect_{sect}"] = safe_ratio(cnt, total_slots)
+    feats["crypt_is_monosect"] = len(sect_counts) == 1
+
+    # Path shares
+    for path, cnt in path_counts.items():
+        feats[f"crypt_path_{path}"] = safe_ratio(cnt, total_slots)
 
     # Dominant clan detection (>50% of slots)
     dominant_clans = [

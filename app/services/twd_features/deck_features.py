@@ -6,6 +6,7 @@ from app.models.vtes import LibraryCard
 from app.services.twd_features.constants import LIBRARY_TRAITS_REGEX, CardFeatures
 from app.services.twd_features.helpers import (
     classify_era,
+    get_lib_sect_req,
     parse_cost,
     parse_disc_names,
     parse_disc_tags,
@@ -47,8 +48,12 @@ def library_deck_features(
     trifle_slots = 0
     burn_option_slots = 0
     clan_req_counts: dict[str, int] = defaultdict(int)
+    sect_req_counts: dict[str, int] = defaultdict(int)
+    path_req_counts: dict[str, int] = defaultdict(int)
     era_pre_slots = 0
     era_post_slots = 0
+    printed_pre_slots = 0
+    printed_post_slots = 0
     trait_counts: dict[str, int] = defaultdict(int)
     multi_type_slots = 0
 
@@ -100,12 +105,25 @@ def library_deck_features(
             clan_key = card.clan.lower().replace(" ", "_")
             clan_req_counts[clan_key] += count
 
+        # Sect requirement (from LibraryMeta requirement field)
+        sect_req = get_lib_sect_req(card.requirement or "")
+        if sect_req != "none":
+            sect_req_counts[sect_req] += count
+
+        # Path requirement
+        path_key = card.path.strip().lower().replace(" ", "_") if card.path.strip() else "none"
+        path_req_counts[path_key] += count
+
         # Era
         era = classify_era(card)
         if era.get("firstprint"):
             era_post_slots += count
         else:
             era_pre_slots += count
+        if era.get("n_print_pre", 0) > 0:
+            printed_pre_slots += count
+        if era.get("n_print_post", 0) > 0:
+            printed_post_slots += count
 
         # Traits (VDB regex map)
         card_text = (card.card_text or "").strip()
@@ -139,6 +157,14 @@ def library_deck_features(
     # Clan requirement shares
     for clan, cnt in clan_req_counts.items():
         feats[f"lib_req_clan_{clan}"] = safe_ratio(cnt, total_slots)
+
+    # Sect requirement shares
+    for sect, cnt in sect_req_counts.items():
+        feats[f"lib_req_sect_{sect}"] = safe_ratio(cnt, total_slots)
+
+    # Path requirement shares
+    for path, cnt in path_req_counts.items():
+        feats[f"lib_req_path_{path}"] = safe_ratio(cnt, total_slots)
 
     # Trait shares
     for trait_name, cnt in trait_counts.items():

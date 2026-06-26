@@ -1,5 +1,12 @@
 from app.models import CryptCard, LibraryCard
-from app.services.twd_features.constants import DATE, DUMMY_SET, LINE_START_TAG_RE, V5_RELEASE_DATE
+from app.services.twd_features.constants import (
+    DATE,
+    DUMMY_SET,
+    KNOWN_SECTS,
+    LINE_START_TAG_RE,
+    REQUIREMENT_TO_SECT,
+    V5_RELEASE_DATE,
+)
 
 
 def classify_era(card: CryptCard | LibraryCard) -> dict[str, int]:
@@ -51,6 +58,20 @@ def parse_disc_names(discs: str) -> list[str]:
     if "&" in discs:
         return [d.strip().lower() for d in discs.split(" & ") if d.strip()]
     return [discs.strip().lower()]
+
+
+def get_crypt_sect(card_text: str) -> str:
+    """Extract sect from crypt card_text prefix (e.g. 'Sabbat: ...' → 'sabbat')."""
+    prefix = card_text.strip().split(":")[0].lower().strip()
+    return prefix if prefix in KNOWN_SECTS else "none"
+
+
+def get_lib_sect_req(requirement: str) -> str:
+    """Derive sect from a library card's requirement field."""
+    req = requirement.lower().strip()
+    if req in KNOWN_SECTS:
+        return req
+    return REQUIREMENT_TO_SECT.get(req, "none")
 
 
 def parse_disc_tags(card_text: str) -> tuple[set[str], set[str]]:
