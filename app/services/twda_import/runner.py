@@ -27,7 +27,7 @@ logger = settings.log.get_logger(__name__)
 
 CryptKey = tuple[str, str, bool]  # (clean_name.lower(), group_str, adv)
 CryptRef = tuple[int, str, bool]  # (id, group, adv)
-CryptRow = tuple[int, str, int, int | None, str | None, bool | None]
+CryptRow = tuple[int, str, str, int | None, str | None, bool | None]
 LibraryRow = tuple[str, int, str, int | None]
 
 # Article en tête de nom, ex. "The Horde" → groupe 1 = "Horde".
@@ -77,21 +77,28 @@ class TournamentImportResult:
 # ----------------------------------------------------------------------------
 #  Maps de résolution (construites une fois)
 # ----------------------------------------------------------------------------
-async def _build_crypt_map(session: AsyncSession) -> dict[CryptKey, CryptRef]:
+async def _build_crypt_map(
+    session: AsyncSession,
+) -> tuple[dict[CryptKey, CryptRef], set[CryptRef]]:
     result = await session.execute(
         select(CryptCard.id, CryptCard.group, CryptCard.adv, CryptCard.name)
     )
     crypt_map: dict[CryptKey, CryptRef] = {}
+    crypt_refs: set[CryptRef] = set()
     for card_id, group, adv, name in result.all():
-        # Clé en minuscules : la résolution est insensible à la casse (cf. _resolve_*).
-        crypt_map[(name.lower(), str(group), bool(adv))] = (card_id, str(group), bool(adv))
-    return crypt_map
+        ref: CryptRef = (card_id, str(group), bool(adv))
+        # Clé en minuscules : la résolution par nom est insensible à la casse (cf. _resolve_*).
+        crypt_map[(name.lower(), str(group), bool(adv))] = ref
+        crypt_refs.add(ref)
+    return crypt_map, crypt_refs
 
 
-async def _build_library_map(session: AsyncSession) -> dict[str, int]:
+async def _build_library_map(session: AsyncSession) -> tuple[dict[str, int], set[int]]:
     result = await session.execute(select(LibraryCard.id, LibraryCard.name))
     library_map: dict[str, int] = {}
+    library_ids: set[int] = set()
     for card_id, name in result.all():
+        library_ids.add(card_id)
         key = name.lower()
         if key in library_map:
             logger.warning(
@@ -102,24 +109,41 @@ async def _build_library_map(session: AsyncSession) -> dict[str, int]:
             )
             continue
         library_map[key] = card_id
-    return library_map
+    return library_map, library_ids
 
 
 def _resolve_crypt(
-    name: str, group: str, adv: bool, crypt_map: dict[CryptKey, CryptRef]
+    entry_id: int | None,
+    name: str,
+    group: str,
+    adv: bool,
+    crypt_map: dict[CryptKey, CryptRef],
+    crypt_refs: set[CryptRef],
 ) -> CryptRef | None:
+    # Résolution directe par id krcg (channel-ten >= 0.9.0) : fiable, sans heuristique de nom.
+    if entry_id is not None:
+        id_ref: CryptRef = (entry_id, group, adv)
+        if id_ref in crypt_refs:
+            return id_ref
+        id_ref = (entry_id, "ANY", adv)
+        if id_ref in crypt_refs:
+            return id_ref
     for candidate in _name_candidates(name):
         key = candidate.lower()
-        ref = crypt_map.get((key, group, adv))
-        if ref is None:
+        name_ref = crypt_map.get((key, group, adv))
+        if name_ref is None:
             # Certaines cartes de crypt sont stockées avec le groupe "ANY".
-            ref = crypt_map.get((key, "ANY", adv))
-        if ref is not None:
-            return ref
+            name_ref = crypt_map.get((key, "ANY", adv))
+        if name_ref is not None:
+            return name_ref
     return None
 
 
-def _resolve_library(name: str, library_map: dict[str, int]) -> int | None:
+def _resolve_library(
+    entry_id: int | None, name: str, library_map: dict[str, int], library_ids: set[int]
+) -> int | None:
+    if entry_id is not None and entry_id in library_ids:
+        return entry_id
     for candidate in _name_candidates(name):
         card_id = library_map.get(candidate.lower())
         if card_id is not None:
@@ -131,12 +155,14 @@ def _resolve_library(name: str, library_map: dict[str, int]) -> int | None:
 #  Construction des lignes "désirées" à partir du YAML
 # ----------------------------------------------------------------------------
 def _desired_crypt_rows(
-    deck: YamlDeck, crypt_map: dict[CryptKey, CryptRef]
+    deck: YamlDeck, crypt_map: dict[CryptKey, CryptRef], crypt_refs: set[CryptRef]
 ) -> tuple[list[CryptRow], int]:
     rows: list[CryptRow] = []
     unresolved = 0
     for entry in deck.crypt:
-        ref = _resolve_crypt(entry.clean_name, str(entry.grouping), entry.is_adv, crypt_map)
+        ref = _resolve_crypt(
+            entry.id, entry.clean_name, str(entry.grouping), entry.is_adv, crypt_map, crypt_refs
+        )
         if ref is None:
             unresolved += 1
             logger.warning(
@@ -148,18 +174,18 @@ def _desired_crypt_rows(
             card_id, group, adv = None, None, None
         else:
             card_id, group, adv = ref
-        rows.append((entry.count, entry.name, entry.grouping, card_id, group, adv))
+        rows.append((entry.count, entry.name, str(entry.grouping), card_id, group, adv))
     return rows, unresolved
 
 
 def _desired_library_rows(
-    deck: YamlDeck, library_map: dict[str, int]
+    deck: YamlDeck, library_map: dict[str, int], library_ids: set[int]
 ) -> tuple[list[LibraryRow], int]:
     rows: list[LibraryRow] = []
     unresolved = 0
     for section in deck.library_sections:
         for card in section.cards:
-            card_id = _resolve_library(card.name, library_map)
+            card_id = _resolve_library(card.id, card.name, library_map, library_ids)
             if card_id is None:
                 unresolved += 1
                 logger.warning("Library non résolue: %r (section=%s)", card.name, section.name)
@@ -238,11 +264,13 @@ async def _upsert_tournament(
     session: AsyncSession,
     tour: YamlTournament,
     crypt_map: dict[CryptKey, CryptRef],
+    crypt_refs: set[CryptRef],
     library_map: dict[str, int],
+    library_ids: set[int],
     result: TournamentImportResult,
 ) -> None:
-    crypt_rows, unresolved_c = _desired_crypt_rows(tour.deck, crypt_map)
-    library_rows, unresolved_l = _desired_library_rows(tour.deck, library_map)
+    crypt_rows, unresolved_c = _desired_crypt_rows(tour.deck, crypt_map, crypt_refs)
+    library_rows, unresolved_l = _desired_library_rows(tour.deck, library_map, library_ids)
     result.unresolved_crypt += unresolved_c
     result.unresolved_library += unresolved_l
 
@@ -325,8 +353,8 @@ async def run_import() -> TournamentImportResult:
     logger.info("%d fichiers de tournois trouvés", len(paths))
 
     async with settings.db.async_session_local() as session:
-        crypt_map = await _build_crypt_map(session)
-        library_map = await _build_library_map(session)
+        crypt_map, crypt_refs = await _build_crypt_map(session)
+        library_map, library_ids = await _build_library_map(session)
         logger.info(
             "Maps de résolution: %d cartes crypt, %d cartes library",
             len(crypt_map),
@@ -339,7 +367,9 @@ async def run_import() -> TournamentImportResult:
                 result.skipped += 1
                 continue
 
-            await _upsert_tournament(session, tour, crypt_map, library_map, result)
+            await _upsert_tournament(
+                session, tour, crypt_map, crypt_refs, library_map, library_ids, result
+            )
 
             if index % cfg.commit_batch_size == 0:
                 await session.commit()

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tabriz-assembly"
-version = "0.0.1"
+version = "0.5.0"
 description = "Tabriz Assembly: Machine Learning/Statistics exploration"
 readme = "README.md"
 requires-python = ">=3.14"

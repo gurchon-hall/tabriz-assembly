@@ -135,7 +135,8 @@ class DeckCryptCard(Base):
 
     count: Mapped[int] = mapped_column(Integer, nullable=False)
     raw_name: Mapped[str] = mapped_column(String, nullable=False)
-    raw_grouping: Mapped[int] = mapped_column(Integer, nullable=False)
+    # str, pas int : le YAML source peut porter le groupe "ANY" (vampire multi-groupe).
+    raw_grouping: Mapped[str] = mapped_column(String, nullable=False)
 
     crypt_card_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     crypt_card_group: Mapped[str | None] = mapped_column(String, nullable=True)

@@ -7,7 +7,7 @@ Le deck contient une crypt (liste de vampires) et des sections library
 """
 
 from datetime import date
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -19,11 +19,20 @@ class YamlCryptEntry(BaseModel):
 
     count: int
     name: str  # nom brut, peut se terminer par " (ADV)"
+    # id krcg canonique (channel-ten >= 0.9.0) ; absent sur les fichiers plus anciens.
+    id: int | None = None
     capacity: int = 0
     disciplines: str = ""
     clan: str = ""
     title: str | None = None
-    grouping: int
+    grouping: int | Literal["ANY"]
+
+    @field_validator("grouping", mode="before")
+    @classmethod
+    def _coerce_grouping(cls, v: Any) -> Any:
+        if isinstance(v, str) and v.strip().upper() == "ANY":
+            return "ANY"
+        return v
 
     @property
     def is_adv(self) -> bool:
@@ -41,6 +50,8 @@ class YamlLibraryCardEntry(BaseModel):
 
     count: int
     name: str
+    # id krcg canonique (channel-ten >= 0.9.0) ; absent sur les fichiers plus anciens.
+    id: int | None = None
 
 
 class YamlLibrarySection(BaseModel):
