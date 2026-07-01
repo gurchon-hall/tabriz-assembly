@@ -145,6 +145,8 @@ def library_deck_features(
     feats["lib_pct_multi_disc"] = safe_ratio(multi_disc_slots, total_slots)
     feats["lib_pct_era_v5plus"] = safe_ratio(era_post_slots, total_slots)
     feats["lib_pct_era_pre_v5"] = safe_ratio(era_pre_slots, total_slots)
+    feats["lib_pct_printed_pre_v5"] = safe_ratio(printed_pre_slots, total_slots)
+    feats["lib_pct_printed_post_v5"] = safe_ratio(printed_post_slots, total_slots)
 
     # Type shares
     for type_name, cnt in type_counts.items():

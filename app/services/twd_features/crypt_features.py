@@ -45,6 +45,8 @@ def crypt_deck_features(
     disc_sup_counts: dict[str, int] = defaultdict(int)  # superior only
     era_pre_slots = 0
     era_post_slots = 0
+    printed_pre_slots = 0
+    printed_post_slots = 0
     uncond_bleed = 0
     uncond_stealth = 0
     uncond_intercept = 0
@@ -87,6 +89,10 @@ def crypt_deck_features(
             era_post_slots += count
         else:
             era_pre_slots += count
+        if era.get("n_print_pre", 0) > 0:
+            printed_pre_slots += count
+        if era.get("n_print_post", 0) > 0:
+            printed_post_slots += count
 
         # Conditional / unconditional bonuses
         text = card.card_text.strip().lower()
@@ -111,6 +117,8 @@ def crypt_deck_features(
 
     feats["crypt_pct_era_v5plus"] = safe_ratio(era_post_slots, total_slots)
     feats["crypt_pct_era_pre_v5"] = safe_ratio(era_pre_slots, total_slots)
+    feats["crypt_pct_printed_pre_v5"] = safe_ratio(printed_pre_slots, total_slots)
+    feats["crypt_pct_printed_post_v5"] = safe_ratio(printed_post_slots, total_slots)
 
     feats["crypt_pct_uncond_bleed"] = safe_ratio(uncond_bleed, total_slots)
     feats["crypt_pct_uncond_stealth"] = safe_ratio(uncond_stealth, total_slots)

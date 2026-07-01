@@ -55,7 +55,7 @@ def _render_features(features: CardFeatures) -> dict[str, CardFeatures]:
             "bleed" in k or "stealth" in k or "intercept" in k or "strength" in k
         ):
             groups["crypt_bonuses"][k] = v
-        elif k.startswith("crypt_pct_era") or k in ("crypt_pct_era_v5plus", "crypt_pct_era_pre_v5"):
+        elif k.startswith("crypt_pct_era") or k.startswith("crypt_pct_printed_"):
             groups["crypt_era"][k] = v
         elif k.startswith("crypt_"):
             groups["crypt_scalars"][k] = v
@@ -67,7 +67,7 @@ def _render_features(features: CardFeatures) -> dict[str, CardFeatures]:
             groups["library_clan_req"][k] = v
         elif k.startswith("lib_trait_"):
             groups["library_traits"][k] = v
-        elif k.startswith("lib_pct_era"):
+        elif k.startswith("lib_pct_era") or k.startswith("lib_pct_printed_"):
             groups["library_era"][k] = v
         elif k.startswith("lib_"):
             groups["library_scalars"][k] = v

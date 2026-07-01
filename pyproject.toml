@@ -50,7 +50,8 @@ machine-learning = [
     "scikit-learn",
     "scikit-learn-stubs",
     "scipy",
-    "scipy-stubs[scipy]"
+    "scipy-stubs[scipy]",
+    "umap-learn",
 ]
 
 [tool.script]

@@ -116,6 +116,11 @@ class LibraryCard(Card):
             return "X"
         if isinstance(v, int):
             return v
+        if isinstance(v, str) and v.strip():
+            try:
+                return int(v.strip())
+            except ValueError:
+                pass
         return None
 
     @field_validator("burn_option", mode="before")
